@@ -1,0 +1,42 @@
+# Ansible-controlled filename: /etc/sssd/sssd.conf
+# Source: ansible sssd.conf.Ubuntu
+# Date: 2016-03-04
+# Reference: Building the Centos 7 Template.docx
+# NOTE: This file is managed via Ansible: manual changes will be lost
+
+[domain/default]
+autofs_provider = ldap
+cache_credentials = True
+krb5_realm = EXAMPLE.COM
+ldap_search_base = dc=example,dc=edu
+krb5_server = dc1.example.com,dc2.example.com,dc3.example.com,dc4.example.com
+id_provider = ldap
+auth_provider = krb5
+chpass_provider = krb5
+krb5_store_password_if_offline = True
+ldap_uri = ldap://example.com
+krb5_kpasswd = dc1.example.com,dc2.example.com,dc3.example.com,dc4.example.com
+ldap_tls_cacertdir = /etc/openldap/cacerts
+
+[sssd]
+domains = default, example.com
+config_file_version = 2
+services = nss, pam, autofs
+
+[domain/example.com]
+ad_domain = example.com
+krb5_realm = EXAMPLE.COM
+realmd_tags = manages-system joined-with-samba
+cache_credentials = True
+id_provider = ad
+krb5_store_password_if_offline = True
+default_shell = /bin/bash
+ldap_id_mapping = False
+use_fully_qualified_names = False
+fallback_homedir = /home/%d/%u
+access_provider = ad
+ad_access_filter = (&(memberOf=CN=Linux-Server-Access_grp,OU=Linux-Access,OU=Accounts-Groups,DC=example,DC=edu)(unixHomeDirectory=*))
+simple_allow_users = Alice, alice, Bob, bob
+case_sensitive = true
+ad_gpo_access_control = disabled
+[autofs]

@@ -1,0 +1,36 @@
+---
+- name: ssh get vars
+  include_vars: default.yml
+
+- name: ssh get OS vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - default.yml
+
+- name: ssh get host-specific vars
+  include_vars: '{{ item }}'
+  with_first_found:
+   - files:
+     - '../hosts/{{ ansible_fqdn }}.yml'
+     skip: true
+
+- name: ssh_config conf
+  template: src='{{ item }}' dest='{{ ssh_config_file }}' owner=root group='{{ ssh_group }}' mode=0644
+  with_first_found:
+    - files:
+      - '../hosts/ssh_config.{{ ansible_fqdn }}'
+      - 'ssh_config.{{ ansible_distribution }}'
+      - ssh_config
+  notify:
+    - ssh restart
+
+- name: sshd_config conf
+  template: src='{{ item }}' dest='{{ sshd_config_file }}' owner=root group='{{ ssh_group }}' mode=0644
+  with_first_found:
+    - files:
+      - '../hosts/sshd_config.{{ ansible_fqdn }}'
+      - 'sshd_config.{{ ansible_distribution }}'
+      - sshd_config
+  notify:
+    - ssh restart

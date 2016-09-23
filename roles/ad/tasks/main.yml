@@ -1,0 +1,39 @@
+---
+- name: ad get vars
+  include_vars: default.yml 
+
+- name: ad get OS vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - default.yml
+
+- name: ad get host-specific vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - files:
+      - '../hosts/{{ ansible_fqdn }}.yml'
+      skip: true
+
+- name: sssd conf
+  template: src="sssd.conf.{{ ansible_distribution }}" dest="{{ sssd_dir }}/sssd.conf"
+  notify:
+    - sssd restart
+
+- name: sssd ad_access_filter
+  lineinfile: dest="{{ sssd_dir }}/sssd.conf" regexp="^ad_access_filter = .*$" line="ad_access_filter = {{ ad_access_filter }}"
+  when: ad_access_filter is defined
+  notify:
+    - sssd restart
+
+- name: sssd simple_allow_users
+  lineinfile: dest="{{ sssd_dir }}/sssd.conf" regexp="^simple_allow_users = .*$" line="simple_allow_users = {{ simple_allow_users }}"
+  when: simple_allow_users is defined
+  notify:
+    - sssd restart
+
+- name: sssd start
+  service: name=sssd state=started
+
+- name: kerberos conf
+  template: src="krb5.conf.{{ ansible_distribution }}" dest="{{ krb5_conf_dir }}/krb5.conf"

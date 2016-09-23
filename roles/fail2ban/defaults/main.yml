@@ -1,0 +1,3 @@
+---
+fail2ban_filterd_path: roles/fail2ban/files/filter.d/
+fail2ban_jaild_path: roles/fail2ban/files/jail.d/

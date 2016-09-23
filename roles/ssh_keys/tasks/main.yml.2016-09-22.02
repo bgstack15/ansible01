@@ -1,0 +1,28 @@
+---
+- name: ssh_keys get vars
+  include_vars: default.yml
+
+- name: ssh_keys get OS vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - default.yml
+
+- shell: echo "{{ item | basename | regex_replace('\.pubkeys?$','') }}"
+  with_fileglob:
+    - '*.pubkey'
+    - '*.pubkeys'
+  register: users_to_check
+
+- debug: msg="{{ item.stdout_lines }}"
+  with_items:
+    - '{{ users_to_check.results }}'
+
+#- debug: var='{{ item.stdout_lines }}'
+#  with_items:
+#    - '{{ users_to_check.items }}'
+
+#- name: ssh_keys deploy keys
+#  template: src='{{ item.stdout_lines }}.pubkey' dest='{{ master_home_dir }}/{{ item.stdout_lines }}/.ssh/authorized_keys' mode=0600 owner='{{ item.stdout_lines }}'
+#  with_items: 
+#    - '{{ users_to_check.results }}'

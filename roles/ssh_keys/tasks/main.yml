@@ -1,0 +1,63 @@
+---
+- name: ssh_keys get vars
+  include_vars: default.yml
+
+- name: ssh_keys get OS vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - default.yml
+
+#- shell: echo "{{ item | basename | regex_replace('\.pubkeys?$','') }}"
+#  with_fileglob:
+#    - '*.pubkey'
+#    - '*.pubkeys'
+#  register: users_to_check
+
+#- debug: var=ssh_key_strings
+#- debug: var=ssh_key_files
+
+- stat: path='{{ master_home_dir}}/{{ item.user }}/.ssh'
+  with_items:
+    - '{{ ssh_key_strings }}'
+  register: "s"
+  when: ssh_key_strings is defined
+
+- stat: path='{{ master_home_dir}}/{{ item.user }}/.ssh'
+  with_items:
+    - '{{ ssh_key_files }}'
+  register: "r"
+  when: ssh_key_files is defined
+
+#- debug: msg='{{ item.stat.exists }}'
+#  with_flattened:
+#    - '{{ r.results }}'
+
+- name: ssh_keys deploy keys from files
+  template:
+    src: "roles/ssh_keys/files/{{ item.item.file }}"
+    dest: '{{ master_home_dir }}/{{ item.item.user }}/.ssh/authorized_keys'
+    mode: 0600
+    owner: '{{ item.item.user }}'
+  with_items:
+    - '{{ r.results }}'
+  when:
+    - item.stat.exists is defined
+    - '{{ item.stat.exists }}'
+    - r is defined
+
+- name: ssh_keys deploy keys from strings
+  lineinfile:
+    line: '{{ item.item.string }}'
+    regexp: "{{ item.item.string | regex_replace('^(.{40}).*$','\\1') }}"
+    dest: '{{ master_home_dir }}/{{ item.item.user }}/.ssh/authorized_keys'
+    mode: 0600
+    owner: '{{ item.item.user }}'
+    create: yes
+    state: present
+  with_items:
+    - '{{ s.results }}'
+  when:
+    - item.stat.exists is defined
+    - '{{ item.stat.exists }}'
+    - s is defined

@@ -1,0 +1,20 @@
+---
+- name: fail2ban copy filter
+  copy:
+    src: "{{ fail2ban_filterd_path }}"
+    dest: /etc/fail2ban/filter.d/
+    owner: root
+    group: root
+    mode: 0644
+  when: fail2ban_filterd_path is defined
+  notify: fail2ban restart
+
+- name: fail2ban copy jails
+  copy:
+    src: "{{ fail2ban_jaild_path }}"
+    dest: /etc/fail2ban/jail.d/
+    owner: root
+    group: root
+    mode: 0644
+  when: fail2ban_jaild_path is defined
+  notify: fail2ban restart

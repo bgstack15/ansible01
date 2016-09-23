@@ -1,0 +1,5 @@
+---
+sshd_config_file: /etc/ssh/sshd_config
+ssh_config_file: /etc/ssh/ssh_config
+ssh_group: root
+ssh_service: 'sshd'

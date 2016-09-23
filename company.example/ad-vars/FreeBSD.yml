@@ -1,0 +1,4 @@
+---
+sssd_dir: /usr/local/etc/sssd
+ad_access_filter: (&(memberOf=CN=Linux-Server-Access_grp,OU=Linux-Access,OU=Accounts-Groups,DC=example,DC=edu)(unixHomeDirectory=*))
+simple_allow_users: Alice, alice, alice-local

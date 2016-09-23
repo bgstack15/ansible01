@@ -1,0 +1,13 @@
+---
+- name: Test ssh_keys
+  hosts: test
+  remote_user: root
+  roles:
+    - ssh_keys
+  vars:
+#    ssh_key_strings:
+#      - { user: 'jdoe', string: 'a public key here' }
+#      - { user: 'alice', string: 'public key here' }
+#    ssh_key_files:
+#      - { user: 'jdoe', file: '../../../company/pubkeys/jdoe.pubkeys' }
+#      - { user: 'alice', file: '../../../company/pubkeys/alice.pubkey' }

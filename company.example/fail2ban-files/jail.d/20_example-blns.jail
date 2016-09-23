@@ -1,0 +1,21 @@
+# Ansible controlled filename: /etc/fail2ban/jail.d/20_example-blns.jail
+# Source: ansible bgstack15-fail2ban/files/example-blns.jail
+# Date: 2016-04-19
+# Reference: 
+# NOTE: This file is managed via Ansible: manual changes will be lost
+
+[example-blns]
+enabled  = true
+action   = iptables-allports
+          sendmail[name=exampleblns, dest=linuxadmin@example.com]
+filter   = 20_example-blns
+logpath = /var/log/httpd/access_log
+          /var/log/httpd/error_log
+          /var/log/httpd/ssl_access_log
+          /var/log/httpd/ssl_error_log
+          /var/log/apache2/access_log
+          /var/log/apache2/error_log
+          /var/log/apache2/ssl_access_log
+          /var/log/apache2/ssl_error_log
+maxretry = 1
+bantime  = 86400

@@ -1,0 +1,26 @@
+---
+- name: ssh_keys get vars
+  include_vars: default.yml
+
+- name: ssh_keys get OS vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - default.yml
+
+- stat: path='{{ master_home_dir }}/{{ item | basename | regex_replace('\.pubkeys?$','') }}/.ssh'
+  register: files_stat
+  with_fileglob:
+    - '*.pubkey'
+    - '*.pubkeys'
+
+- debug: var='{{ item.stat.exists }}'
+  with_items: '{{ files_stat.results }}'
+
+- name: ssh_keys deploy keys
+  template: src='{{ item }}' dest='{{ master_home_dir }}/{{ item | basename | regex_replace('\.pubkeys?$','') }}/.ssh/authorized_keys' mode=0600 owner='{{ item | basename | regex_replace('\.pubkeys?$',"") }}'
+  with_fileglob:
+    - '*.pubkey'
+    - '*.pubkeys'
+  #when: item2.stat.exists
+  #with_items: '{{ files_stat.results }}'

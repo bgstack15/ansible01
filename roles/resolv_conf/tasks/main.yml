@@ -1,0 +1,16 @@
+---
+- name: resolv_conf get vars
+  include_vars: default.yml
+
+- name: resolv_conf get OS vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - default.yml
+
+- name: resolv_conf file
+  template: src='{{ item }}' dest='{{ resolv_file }}' owner=root group='{{ resolv_group }}' mode=0644
+  with_first_found:
+    - files:
+      - 'resolv.conf.{{ ansible_distribution }}'
+      - resolv.conf
