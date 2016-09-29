@@ -1,5 +1,5 @@
 # Ansible-controlled filename: /etc/sssd/sssd.conf
-# Source: ansible sssd.conf.FreeBSD
+# Source: ansible sssd.conf.Ubuntu
 # Date: 2016-03-04
 # Reference: Building the Centos 7 Template.docx
 # NOTE: This file is managed via Ansible: manual changes will be lost
@@ -8,7 +8,7 @@
 autofs_provider = ldap
 cache_credentials = True
 krb5_realm = EXAMPLE.COM
-ldap_search_base = dc=example,dc=edu
+ldap_search_base = dc=example,dc=com
 krb5_server = dc1.example.com,dc2.example.com,dc3.example.com,dc4.example.com
 id_provider = ldap
 auth_provider = krb5
@@ -21,7 +21,7 @@ ldap_tls_cacertdir = /etc/openldap/cacerts
 [sssd]
 domains = default, example.com
 config_file_version = 2
-services = nss, pam
+services = nss, pam, autofs
 
 [domain/example.com]
 ad_domain = example.com
@@ -35,7 +35,8 @@ ldap_id_mapping = False
 use_fully_qualified_names = False
 fallback_homedir = /home/%d/%u
 access_provider = ad
-ad_access_filter = (&(memberOf=CN=Linux-Server-Access_grp,OU=Linux-Access,OU=Accounts-Groups,DC=example,DC=edu)(unixHomeDirectory=*))
-simple_allow_users = Alice, alice, Bob, bob
+ad_access_filter = (&(memberOf=CN=Linux-Server-Access_grp,OU=Linux-Access,OU=Accounts-Groups,DC=example,DC=com)(unixHomeDirectory=*))
+simple_allow_users = bgstack15, bgstack15, user16, user16
 case_sensitive = true
 ad_gpo_access_control = disabled
+[autofs]

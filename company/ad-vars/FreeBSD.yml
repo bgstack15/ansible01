@@ -1,0 +1,4 @@
+---
+sssd_dir: /usr/local/etc/sssd
+ad_access_filter: (&(memberOf=CN=Linux-Server-Access_grp,OU=Linux-Access,OU=Accounts-Groups,DC=example,DC=com)(unixHomeDirectory=*))
+simple_allow_users: bgstack15, bgstack15, bgstack15-local

@@ -1,0 +1,23 @@
+# First line: source directory      Second line: target directory. WILL BE OVERWRITTEN!
+/etc/ansible
+/home/bgstack15/ansible.clean
+# Rest of the lines are "OLD WORD" "NEW WORD"
+bgstack15 bgstack15
+bgstack15 bgstack15
+bgstack15 bgstack15
+user16  user16
+user16  user16
+user16  user16
+example	example
+EXAMPLE	EXAMPLE
+".com"	".com"
+"dc=com"	"dc=com"
+"DC=com"	"DC=com"
+".COM"		".COM"
+"203.0."	"203.0."
+one	one
+two	 two
+three	three
+four	four
+five	five
+six	six
