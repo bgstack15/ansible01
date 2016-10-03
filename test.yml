@@ -5,8 +5,16 @@
   roles:
     - sudo
   vars:
+<<<<<<< HEAD
     sudo_strings:
       - { priority: 42, exists: 'false', name: 'admins-do-all', content: 'User_Alias ADMINS = bgstack15, bgstack15, user16, user16' }
       - { priority: 43, exists: false, name: 'a', content: "ADMINS ALL=(ALL)  ALL" }
     sudo_files:
       - { exists: 'false', file: '../../../company/sudo-files/40_bgstack15' }
+=======
+    sudo_strings
+      - { priority: 40, name: 'admins-do-all', content: 'User_Alias ADMINS = bgstack15, bgstack15, user16, user16' }
+      - { priority: 41, name: 'a', content: 'ADMINS ALL=(ALL)  ALL' }
+    sudo_files
+      - { file: '../../../company/sudo-files/40_bgstack15' }
+>>>>>>> 4db266d0ec2f78079c8ff271cdb2e78230d3b090

@@ -1,3 +1,0 @@
----
-sssd_dir: /etc/sssd
-krb5_conf_dir: /etc
