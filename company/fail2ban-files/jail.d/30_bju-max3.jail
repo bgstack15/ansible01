@@ -1,0 +1,21 @@
+# Ansible controlled filename: /etc/fail2ban/jail.d/30_example-max3.jail
+# Source: ansible bgstack15-fail2ban/files/example-max3.jail
+# Date: 2016-07-12
+# Reference: example-blns.jail
+# NOTE: This file is managed via Ansible: manual changes will be lost
+
+[example-max3]
+enabled  = true
+action   = iptables-allports
+          sendmail[name=examplemax3, dest=linuxadmin@example.com]
+filter   = 30_example-max3
+logpath = /var/log/httpd/access_log
+          /var/log/httpd/error_log
+          /var/log/httpd/ssl_access_log
+          /var/log/httpd/ssl_error_log
+          /var/log/apache2/access_log
+          /var/log/apache2/error_log
+          /var/log/apache2/ssl_access_log
+          /var/log/apache2/ssl_error_log
+maxretry = 3
+bantime  = 86400

@@ -1,0 +1,63 @@
+---
+- name: sudo get vars
+  include_vars: default.yml
+
+- name: sudo get OS vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - default.yml
+
+- stat: path='{{ sudo_rules_dir }}/{{ item.priority }}_{{ item.name }}' #'
+  with_items:
+    - '{{ sudo_strings }}'
+  register: "s"
+  when: sudo_strings is defined
+
+- name: sudo deploy rules from files
+  template:
+    src: "roles/sudo/files/{{ item.file }}"
+    dest: "{{ sudo_rules_dir }}/{{ item.file | regex_replace('.*/','') }}"
+    mode: 0440
+    owner: '{{ sudo_root_user }}'
+    group: '{{ sudo_root_group  }}'
+  with_items:
+    - '{{ sudo_files }}'
+  when:
+    - sudo_files is defined
+
+- name: sudo remove rules from files
+  file: path='{{ sudo_rules_dir }}/{{ item.file | regex_replace('.*/','') }}' state='absent'
+  with_items:
+    - '{{ sudo_files }}'
+  when:
+    - sudo_files is defined
+    - ( not item.exists ) or ( '{{ item.exists | lower }}' == 'false' )
+
+#- debug: msg='foo'
+#  with_items: '{{ s.results }}'
+
+- name: sudo deploy rules from strings
+  lineinfile:
+    line: "{{ item.item.content }}"
+    regexp: "{{ item.item.content | regex_replace('^(.{8}).*$','\\1') }}"
+    dest: '{{ sudo_rules_dir }}/{{ item.item.priority }}_{{ item.item.name }}'
+    mode: 0600
+    owner: '{{ sudo_root_user }}'
+    group: '{{ sudo_root_group }}'
+    create: yes
+    state: present
+  with_items:
+    - '{{ s.results }}'
+  when:
+    - item.stat.exists is defined
+    - s is defined
+    - '{{ item.item.exists }}'
+
+- name: sudo remove rules from strings
+  file: path='{{ sudo_rules_dir }}/{{ item.item.priority }}_{{ item.item.name }}' state='absent'
+  with_items:
+    - '{{ s.results }}'
+  when:
+    - s is defined
+    - ( not item.item.exists ) or ( '{{ item.item.exists | lower }}' == 'false' )

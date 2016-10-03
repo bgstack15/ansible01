@@ -1,0 +1,4 @@
+---
+sudo_rules_dir: /usr/local/etc/sudoers.d/
+sudo_root_user: root
+sudo_root_group: wheel

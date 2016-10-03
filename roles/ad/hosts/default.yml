@@ -1,0 +1,4 @@
+# This file exists to ensure the directory is generated if ever packed in a tarball or something.
+# This directory, hosts/, may be used for specific hosts to get specific variables
+---
+ad_access_filter: SHOULD NEVER SEE THIS

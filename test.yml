@@ -1,0 +1,12 @@
+---
+- name: Test playbook for sudo
+  hosts: test
+  remote_user: root
+  roles:
+    - sudo
+  vars:
+    sudo_strings:
+      - { priority: 42, exists: 'false', name: 'admins-do-all', content: 'User_Alias ADMINS = bgstack15, bgstack15, user16, user16' }
+      - { priority: 43, exists: false, name: 'a', content: "ADMINS ALL=(ALL)  ALL" }
+    sudo_files:
+      - { exists: 'false', file: '../../../company/sudo-files/40_bgstack15' }

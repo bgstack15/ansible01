@@ -1,0 +1,18 @@
+---
+- name: All hosts
+  hosts: all 
+  remote_user: root
+  roles:
+    - ad
+    - resolv_conf
+    - ssh
+    - ssh_keys
+  vars:
+    ssh_key_files:
+      - { user: 'bgstack15', file: '../../../company/pubkeys/bgstack15.pubkeys' }
+
+- name: Webservers
+  hosts: webservers
+  remote_user: root
+  roles:
+    - fail2ban

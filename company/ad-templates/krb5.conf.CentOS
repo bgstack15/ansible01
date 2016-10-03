@@ -1,0 +1,35 @@
+# Ansible controlled filename: /etc/krb5.conf
+# Source: ansible bgstack15-ad/templates/krb5.conf.CentOS
+# Date: 2016-03-04
+# Reference: Building the Centos 7 Template.docx
+# NOTE: This file is managed via Ansible: manual changes will be lost
+
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ dns_lookup_realm = false
+ ticket_lifetime = 24h
+ renew_lifetime = 7d
+ forwardable = true
+ rdns = false
+ default_ccache_name = KEYRING:persistent:%{uid}
+
+ default_realm = EXAMPLE.COM
+[realms]
+ EXAMPLE.COM = {
+  kdc = dc1.example.com
+  kdc = dc2.example.com
+  kdc = dc3.example.com
+  kdc = dc4.example.com
+  admin_server = dc1.example.com
+  admin_server = dc2.example.com
+  admin_server = dc3.example.com
+  admin_server = dc4.example.com
+ }
+
+[domain_realm]
+example.com = EXAMPLE.COM
+ .example.com = EXAMPLE.COM
