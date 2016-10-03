@@ -6,7 +6,7 @@
     - sudo
   vars:
     sudo_strings:
-      - { priority: 42, exists: 'false', name: 'admins-do-all', content: 'User_Alias ADMINS = bgstack15, bgstack15, user16, user16' }
+      - { priority: 42, exists: 'false', name: 'admins-do-all', content: 'User_Alias ADMINS = Bgstack15, bgstack15, user16, User16' }
       - { priority: 43, exists: false, name: 'a', content: "ADMINS ALL=(ALL)  ALL" }
     sudo_files:
-      - { exists: 'false', file: '../../../company/sudo-files/40_bgstack15' }
+      - { exists: 'false', file: '../../../company/sudo-files/40_BGSTACK15' }

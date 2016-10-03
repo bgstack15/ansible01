@@ -1,2 +1,2 @@
 #!/bin/sh
-\cp -pRf /home/bgstack15/ansible.clean/.git /etc/ansible
+\cp -pRf /home/work/ansible.clean/.git /etc/ansible

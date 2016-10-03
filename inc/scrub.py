@@ -6,7 +6,8 @@
 # Title: Script that Simultaneously Copies and Scrubs a Directory
 # Purpose: Prepare projects for publication by removing private information like usernames and hostnames
 # Package: Various
-# History: 
+# History:
+#    2016-10-03 working on batch rename files
 # Usage:
 #    Store this file with any package that gets published. Adjust scrub.txt in local directory.
 #  # First line: source directory      Second line: target directory. WILL BE OVERWRITTEN!
@@ -21,16 +22,17 @@
 #    http://stackoverflow.com/questions/6584871/remove-last-character-if-its-a-backslash/6584893#6584893
 #    http://stackoverflow.com/questions/2212643/python-recursive-folder-read/2212728#2212728
 #    parallel lists: http://stackoverflow.com/questions/1663807/how-can-i-iterate-through-two-lists-in-parallel-in-python
+#    file renames http://stackoverflow.com/questions/225735/batch-renaming-of-files-in-a-directory/7917798#7917798
 # Improve:
 #    Add option to specify scrub file
 #    Add exclude option to scrub file, such as .git and so on
 #    Accept CLI options like source, destination, even exclusions?
-#    Also change filenames
+#    Add flag for performing file renames as well, or file renames only
 import re, shlex, os, sys, shutil
 from pathlib import Path
 
 # scrubpy version
-scrubpyversion = "2016-09-29b"
+scrubpyversion = "2016-10-03a"
 
 # Define functions
 
@@ -107,3 +109,13 @@ for rootfolder, subdirs, files in os.walk(thisdir):
                   data = data.replace(oldword,newword)
                changed = data
                target.write(changed)
+
+# Execute file renames
+# Used "file renames" reference, as well as the structure of directory traversal used earlier, which was from a different source.
+for rootfolder, subdirs, files in os.walk(newdir):
+   for filename in files:
+      oldpath = os.path.join(rootfolder, filename)
+      for oldword, newword in zip(oldstrings, newstrings):
+         if oldword in oldpath:
+            #print("oldword=" + oldword + "\toldpath=" + oldpath)
+            os.rename(oldpath, oldpath.replace(oldword,newword))

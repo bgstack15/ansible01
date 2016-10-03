@@ -1,0 +1,2 @@
+User_Alias BGSTACK15 = Bgstack15, bgstack15, bgstack15-local
+BGSTACK15 ALL=(ALL)       NOPASSWD: ALL

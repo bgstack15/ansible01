@@ -36,6 +36,6 @@ use_fully_qualified_names = False
 fallback_homedir = /home/%d/%u
 access_provider = ad
 ad_access_filter = (&(memberOf=CN=Linux-Server-Access_grp,OU=Linux-Access,OU=Accounts-Groups,DC=example,DC=com)(unixHomeDirectory=*))
-simple_allow_users = bgstack15, bgstack15, user16, user16
+simple_allow_users = Bgstack15, bgstack15, User16, user16
 case_sensitive = true
 ad_gpo_access_control = disabled
