@@ -14,3 +14,41 @@
     - files:
       - 'roles/ldap_certs/hosts/{{ ansible_fqdn }}.yml'
       skip: true
+
+- name: ldap_certs deploy files that exist
+  template: src='{{ item.file }}' dest='{{ ldap_certs_cert_dir }}/{{ item.file | regex_replace('.*/','') }}' owner='{{ ldap_certs_owner }}' group='{{ ldap_certs_group }}' mode=0644 #'
+  with_items:
+    - '{{ ldap_certs }}'
+  when:
+    - ( not '{{ item.exists | lower }}' == 'false' )
+    - ldap_certs is defined
+
+- name: ldap_certs remove files that should not exist
+  file: path='{{ ldap_certs_cert_dir }}/{{ item.file | regex_replace('.*/','') }}' state='absent'
+  with_items:
+    - '{{ ldap_certs }}'
+  when:
+    - ( not '{{ item.exists }}' ) or ( '{{ item.exists | lower }}' == 'false' )
+    - ldap_certs is defined
+
+- name: ldap_certs get hash values
+  command: openssl x509 -in "{{ ldap_certs_cert_dir }}/{{ item.file | regex_replace('.*/','') }}" -hash -noout
+  register: hashes
+  with_items:
+    - '{{ ldap_certs }}'
+  when:
+    - '{{ item.exists }}'
+    - ( not '{{ item.gets_hashlink | lower }}' == 'false' )
+    - ldap_certs is defined
+
+- name: ldap_certs deploy hashlink files
+  file:
+    path: "{{ ldap_certs_hashlink_dir }}/{{ item.stdout | quote }}.0"
+    src: "{{ ldap_certs_cert_dir}}/{{ item.item.file | regex_replace('.*/','') }}"
+    state: 'link'
+  with_items:
+    - '{{ hashes.results }}'
+  when:
+    - hashes is defined
+    - item.stdout is defined
+    - ldap_certs is defined

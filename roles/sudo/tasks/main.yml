@@ -8,11 +8,14 @@
     - '{{ ansible_distribution }}.yml'
     - default.yml
 
-- stat: path='{{ sudo_rules_dir }}/{{ item.priority }}_{{ item.name }}' #'
+- name: sudo stat files described by strings
+  stat: path='{{ sudo_rules_dir }}/{{ item.priority }}_{{ item.name }}' #'
   with_items:
     - '{{ sudo_strings }}'
   register: "s"
-  when: sudo_strings is defined
+  when:
+    - sudo_strings is defined
+    - item.priority is defined
 
 - name: sudo deploy rules from files
   template:
@@ -60,4 +63,5 @@
     - '{{ s.results }}'
   when:
     - s is defined
+    - sudo_strings is defined
     - ( not item.item.exists ) or ( '{{ item.item.exists | lower }}' == 'false' )

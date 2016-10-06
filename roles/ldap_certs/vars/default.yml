@@ -1,3 +1,5 @@
 ---
 ldap_certs_cert_dir: /etc/openldap/certs
 ldap_certs_hashlink_dir: /etc/openldap/cacerts
+ldap_certs_owner: root
+ldap_certs_group: root

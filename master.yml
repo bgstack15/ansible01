@@ -7,9 +7,15 @@
     - resolv_conf
     - ssh
     - ssh_keys
+    - sudo
+    - ldap_certs
   vars:
     ssh_key_files:
       - { user: 'bgstack15', file: '../../../company/pubkeys/bgstack15.pubkeys' }
+    sudo_files:
+      - { exists: 'false', file: '../../../company/sudo-files/40_BGSTACK15' }
+    ldap_certs:
+      - { exists: 'true', gets_hashlink: 'true', file: '../../../company/ldap_certs-files/certs-example-2016.pem' }
 
 - name: Webservers
   hosts: webservers
