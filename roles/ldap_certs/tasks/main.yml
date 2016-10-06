@@ -1,0 +1,16 @@
+---
+- name: ldap_certs get vars
+  include_vars: default.yml
+
+- name: ldap_certs get OS vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - default.yml
+
+- name: ldap_certs get host-specific vars
+  include_vars: '{{ item }}'
+  with_first_found:
+    - files:
+      - 'roles/ldap_certs/hosts/{{ ansible_fqdn }}.yml'
+      skip: true

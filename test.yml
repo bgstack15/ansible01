@@ -1,12 +1,12 @@
 ---
-- name: Test playbook for sudo
+- name: Test playbook for ldap_certs
   hosts: test
   remote_user: root
   roles:
     - sudo
+    - ldap_certs
   vars:
-    sudo_strings:
-      - { priority: 42, exists: 'false', name: 'admins-do-all', content: 'User_Alias ADMINS = Bgstack15, bgstack15, user16, User16' }
-      - { priority: 43, exists: false, name: 'a', content: "ADMINS ALL=(ALL)  ALL" }
-    sudo_files:
-      - { exists: 'false', file: '../../../company/sudo-files/40_BGSTACK15' }
+    ldap_certs:
+      - { exists: 'true', gets_hashlink: 'false', file: '../../../company/ldap_certs-files/CA1-CA1.crt' }
+      - { exists: 'true', gets_hashlink: 'false', file: '../../../company/ldap_certs-files/CA2-SubCA.crt' }
+      - { exists: 'true', gets_hashlink: 'true', file: '../../../company/ldap_certs-files/certs-example-2016.pem' }

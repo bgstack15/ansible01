@@ -12,7 +12,7 @@
   include_vars: '{{ item }}'
   with_first_found:
    - files:
-     - '../hosts/{{ ansible_fqdn }}.yml'
+     - 'roles/ssh/hosts/{{ ansible_fqdn }}.yml'
      skip: true
 
 - name: ssh_config conf

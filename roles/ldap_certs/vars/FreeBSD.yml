@@ -1,0 +1,3 @@
+---
+ldap_certs_cert_dir: /usr/local/etc/openldap
+ldap_certs_hashlink_dir: /usr/local/etc/openldap
